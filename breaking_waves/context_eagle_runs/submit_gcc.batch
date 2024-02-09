@@ -1,0 +1,21 @@
+#!/bin/bash
+
+#SBATCH --job-name=BW_3n
+#SBATCH --account=hfm
+#SBATCH --nodes=45
+#SBATCH --time=48:00:00
+
+source ~/spack-manager/start.sh
+spack-start
+quick-activate ~/spack-exawind-gcc
+spack load exawind
+module load mpt
+#REPLACE THIS!!!
+amr_exec="/home/mkuhn/spack-exawind-gcc/amr-wind/spack-build-oz52vzt/amr_wind"
+
+echo "Run on cpus using ${amr_exec}"
+
+cd /scratch/mkuhn/breaking_waves/3levels_native
+
+cp ~/testruns_data/breaking_waves/3levels_native/*.inp .
+mpirun -n 1620 ${amr_exec} *.inp

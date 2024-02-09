@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#SBATCH --job-name=BW_3hg
+#SBATCH --account=hfm
+#SBATCH --nodes=8
+#SBATCH --time=48:00:00
+#SBATCH --gres=gpu:2 
+
+source ~/spack-manager/start.sh
+spack-start
+quick-activate ~/spack-exawind-cuda
+spack load exawind
+module load mpt
+#REPLACE THIS!!!
+amr_exec="/home/mkuhn/spack-exawind-gcc/amr-wind/spack-build-axgpe62/amr_wind"
+
+echo "Run on gpus using ${amr_exec}"
+
+cd /scratch/mkuhn/breaking_waves/3levels_hypre_GPU
+
+cp ~/testruns_data/breaking_waves/3levels_hypre_GPU/*.inp .
+mpirun -n 16 ${amr_exec} *.inp

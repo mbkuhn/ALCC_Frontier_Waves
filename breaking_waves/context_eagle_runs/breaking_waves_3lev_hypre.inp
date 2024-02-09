@@ -1,0 +1,128 @@
+#---------------------------------------#
+#            SIMULATION STOP            #
+#.......................................#
+time.stop_time               =   5     # Max (simulated) time to evolve
+time.max_step                =   -50000          # Max number of time steps
+
+#---------------------------------------#
+#         TIME STEP COMPUTATION         #
+#.......................................#
+time.initial_dt         =   0.001        # Use this constant dt if > 0
+time.cfl              =   0.45         # CFL factor
+time.use_force_cfl= true
+#---------------------------------------#
+#            INPUT AND OUTPUT           #
+#.......................................#
+time.plot_interval            =  50       # Steps between plot files
+time.checkpoint_interval      =  500       # Steps between checkpoint files
+
+#---------------------------------------#
+#               PHYSICS                 #
+#.......................................#
+incflo.use_godunov = 1
+incflo.godunov_type="weno_z"
+incflo.mflux_type="upwind"
+transport.model = TwoPhaseTransport
+transport.viscosity_fluid1=0.2506
+transport.viscosity_fluid2=0.01
+transport.laminar_prandtl = 0.7
+transport.turbulent_prandtl = 0.3333
+turbulence.model = Laminar 
+
+incflo.physics = MultiPhase BreakingWaves 
+BreakingWaves.amplitude=0.06336
+BreakingWaves.wavelength=1.0
+MultiPhase.density_fluid1=800.
+MultiPhase.density_fluid2=1.
+ICNS.source_terms = GravityForcing 
+MultiPhase.verbose=1
+#---------------------------------------#
+#        ADAPTIVE MESH REFINEMENT       #
+#.......................................#
+amr.n_cell              = 128 64 128
+amr.max_level = 2
+tagging.labels = sr
+tagging.sr.type = CartBoxRefinement
+tagging.sr.static_refinement_def = ../static_box.refine
+
+#---------------------------------------#
+#              GEOMETRY                 #
+#.......................................#
+geometry.prob_lo        =     0.0    0.0  -0.5   # Lo corner coordinates
+geometry.prob_hi        =     1.0   0.5   0.5  # Hi corner coordinates
+geometry.is_periodic    =     1     1     0   # Periodicity x y z (0/1)
+
+zlo.type =   "slip_wall"
+zhi.type =   "slip_wall"
+
+incflo.post_processing     = we
+we.type                    = WaveEnergy
+we.output_frequency        = 50
+
+incflo.verbose=0
+nodal_proj.verbose = 0
+nodal_proj.mg_rtol = 1.0e-8
+nodal_proj.mg_atol = 1.0e-12
+nodal_proj.maxiter = 100
+nodal_proj.max_coarsening_level = 0
+nodal_proj.num_pre_smooth = 20
+nodal_proj.num_post_smooth = 20
+nodal_proj.bottom_solver = hypre
+nodal_proj.bottom_verbose = 0
+nodal_proj.bottom_rtol = 1.0e-10
+nodal_proj.bottom_atol = 1.0e-16
+nodal_proj.bottom_maxiter = 100
+nodal_proj.hypre_namespace = "nodal_proj.hypre"
+nodal_proj.hypre.hypre_solver = GMRES
+nodal_proj.hypre.hypre_preconditioner = BoomerAMG
+nodal_proj.hypre.verbose = 0
+nodal_proj.hypre.bamg_verbose = 0
+nodal_proj.hypre.num_krylov = 40
+nodal_proj.hypre.bamg_coarsen_type = 8
+nodal_proj.hypre.bamg_interp_type = 6
+nodal_proj.hypre.bamg_relax_type = 11
+nodal_proj.hypre.bamg_num_sweeps = 2
+nodal_proj.hypre.bamg_cycle_type = 1
+nodal_proj.hypre.bamg_relax_order = 0
+nodal_proj.hypre.bamg_trunc_factor = 0.1
+nodal_proj.hypre.bamg_max_levels = 10
+nodal_proj.hypre.bamg_agg_num_levels = 2
+nodal_proj.hypre.bamg_agg_interp_type = 7
+nodal_proj.hypre.bamg_agg_pmax_elmts = 3
+nodal_proj.hypre.bamg_pmax_elmts = 3
+nodal_proj.hypre.bamg_keep_transpose = 1
+nodal_proj.hypre.recompute_preconditioner = 1
+nodal_proj.hypre.write_matrix_files = 0
+
+
+mac_proj.verbose = 0
+mac_proj.mg_rtol = 1.0e-8
+mac_proj.mg_atol = 1.0e-12
+mac_proj.max_coarsening_level = 0
+mac_proj.bottom_solver = hypre
+mac_proj.bottom_verbose = 0
+mac_proj.bottom_rtol = 1.0e-10
+mac_proj.bottom_atol = 1.0e-16
+mac_proj.bottom_maxiter = 50
+mac_proj.hypre_namespace = "mac_proj.hypre"
+mac_proj.hypre.hypre_solver = GMRES
+mac_proj.hypre.hypre_preconditioner = BoomerAMG
+mac_proj.hypre.verbose = 0
+mac_proj.hypre.bamg_verbose = 0
+mac_proj.hypre.num_krylov = 40
+mac_proj.hypre.bamg_coarsen_type = 8
+mac_proj.hypre.bamg_interp_type = 6
+mac_proj.hypre.bamg_relax_type = 11
+mac_proj.hypre.bamg_num_sweeps = 2
+mac_proj.hypre.bamg_cycle_type = 1
+mac_proj.hypre.bamg_relax_order = 0
+mac_proj.hypre.bamg_trunc_factor = 0.1
+mac_proj.hypre.bamg_max_levels = 10
+mac_proj.hypre.bamg_agg_num_levels = 2
+mac_proj.hypre.bamg_agg_interp_type = 7
+mac_proj.hypre.bamg_agg_pmax_elmts = 3
+mac_proj.hypre.bamg_pmax_elmts = 3
+mac_proj.hypre.bamg_keep_transpose = 1
+mac_proj.hypre.recompute_preconditioner = 1
+mac_proj.hypre.write_matrix_files = 0
+
